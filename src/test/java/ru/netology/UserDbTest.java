@@ -12,33 +12,35 @@ public class UserDbTest {
     @Test
     public void addUserInMapDbTest() {
         // Given:
+        UsersDb usersDb = new UsersDb();
         User user = new User("123", "124", "Cloya Goo Intov", "Москва, Академика академиков, д.666, кв 001");
-        Map<String, User> usersDb = new TreeMap<>();
 
         // When:
-        usersDb.put(user.getId(), user);
+        usersDb.addUserInMapDb(user);
 
         // Then:
-
-        assertEquals(user, usersDb.put(user.getId(), user));
-        assertSame(user, usersDb.put(user.getId(), user));
+        assertEquals(user, usersDb.usersDb.get("124"));
     }
 
     @Test
     public void addIpToSetIpsForUserTest() {
         // Given:
-        Set<String> set = new HashSet<>();
-        Map<String, Set<String>> ipsForUser = new HashMap<>();
+        UsersDb usersDb = new UsersDb();
         String id = "123";
         String ip = "456";
+        String ip2 = "789";
+        Set<String> setIps = new TreeSet<>();
+        setIps.add(ip);
+        setIps.add(ip2);
+        Iterable<String> iterable = setIps;
+        System.out.println(iterable.toString());
 
         // When:
-        set.add(ip);
-        ipsForUser.put(id, set);
+        usersDb.addIpToSetIpsForUser(id, ip);
+        usersDb.addIpToSetIpsForUser(id, ip2);
 
         // Then:
-        assertTrue(set.add(ip));
-        assertEquals(set, ipsForUser.put(id, set));
+        assertIterableEquals(iterable, usersDb.ipsForUser.get("123"));
     }
 
     @Test
@@ -55,10 +57,10 @@ public class UserDbTest {
 
 
         // When:
-        User villain = users.getVillain(countIpsDb);
+        users.getVillain(countIpsDb);
 
         // Then:
-        assertEquals(user.getId(), villain.getId());
+        assertEquals("4567", users.getVillain(countIpsDb).getId());
     }
 }
 

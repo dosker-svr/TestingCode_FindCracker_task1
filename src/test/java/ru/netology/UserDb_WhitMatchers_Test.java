@@ -14,21 +14,22 @@ public class UserDb_WhitMatchers_Test {
     @Test
     public void addIpToSetIpsForUser_Test() {
         // Given:
+        UsersDb usersDb = new UsersDb();
         String id = "159753";
         String ipO = "666.12.789.159";
         String ipT = "789.456.123";
         Set<String> set = new HashSet<>();
-        Map<String, Set<String>> ipsForUser = new HashMap<>(); // Мапа где храним множества ip по каждому user. key - ID юзера, value - множество ip-шников юзера
         set.add(ipO);
         set.add(ipT);
 
         // When:
-        ipsForUser.put(id, set);
+        usersDb.addIpToSetIpsForUser(id, ipO);
+        usersDb.addIpToSetIpsForUser(id, ipT);
 
         // Then:
-        assertThat(set, hasItems("666.12.789.159", "789.456.123"));
-        assertThat(ipsForUser, hasKey("159753"));
-        assertThat(ipsForUser, hasValue(hasItems("666.12.789.159", "789.456.123")));
+        assertThat(usersDb.ipsForUser.get(id), hasItems("666.12.789.159", "789.456.123"));
+        assertThat(usersDb.ipsForUser, hasKey("159753"));
+        assertThat(usersDb.ipsForUser, hasValue(hasItems("666.12.789.159", "789.456.123")));
     }
 
     @Test
@@ -47,7 +48,7 @@ public class UserDb_WhitMatchers_Test {
         User villain = users.getVillain(countIpsDb);
 
         // Then:
-        assertThat(users.usersDb.entrySet(), not(empty()));
+        assertThat(villain.getId(), equalTo("4567"));
         assertThat(users.ipsForUser, hasKey("4567"));
     }
 }
